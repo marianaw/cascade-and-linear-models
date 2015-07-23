@@ -2,13 +2,34 @@ from igraph import Graph
 from random import random
 
 
-def init_weights(g, w):
-    for e in g.es:
-        e.update_attributes({'weight': w})
-
+def init_weights(g):
+    '''
+    Initializes the weights of the edges of the graph.
+    
+    Parameters:
+        @param g: the graph.
+    '''
+    vs = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
+    for u in vs:
+        for v in g.neighbours(u):
+            edges = [graph.es.select(_source=u, _target=v)]
+            n = len(edges)
+            vertex = g.vs.select(v)
+            d = vertex.outdegree() + vertex.indegree()
+            w = n/d
+            for e in edges:
+                e.update_attributes({'weight': w})
+     
 
 
 def init_node_probs(g):
+    '''
+    Initializes the probabilities of the vertices with random
+    distribution.
+    
+    Parameters:
+        @param g: the graph.
+    '''
     for v in g.vs:
         v.update_attributes({'prob': random()})
     
@@ -34,6 +55,17 @@ def in_neighbours(g, v):
 
 
 def one_step(g, v, seed):
+    '''
+    Performs one step of the algorithm.
+    
+    Parameters:
+        @param g: the graph.
+        @param v: the vertex to be (or not) activated.
+        @param seed: the seed.
+        
+    Returns:
+        The updated seed or set of active vertices.
+    '''
     in_nbs = in_neighbours(g, v)
     active_nbs = [(n, v) for (n, v) in in_nbs if n in seed]
     ss = 0
@@ -49,6 +81,17 @@ def one_step(g, v, seed):
 
     
 def linear_threshold(g, seed):
+    '''
+    The main algorithm. Computes linear threshold model.
+    
+    Parameters:
+        @param g: the graph.
+        @param seed: the seed or initial set of active vertices.
+        
+    Returns:
+        The final set of active vertices seed and a list of the
+        sets of active vertices at each step.
+    '''
     init_weights(g, 0.95)
     init_node_probs(g)
     B = [seed]
