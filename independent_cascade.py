@@ -2,6 +2,66 @@ from igraph import Graph
 from random import random
 
 
+def chance_to_activate_1(source, target):
+    '''
+    First model approach on the paper. The probability of 
+    u activating v is c_(u,v)/d_v.
+    
+    Parameters:
+        @param source: the source of the edge.
+        @param target: the target of the edge.
+        
+    Returns:
+        The probability of source activating target.
+    '''
+    edges = [graph.es.select(_source=source, _target=target)]
+    c = len(edges)
+    p = edges[0]['prob'][0]
+    return 1-(1-p)**c
+
+
+
+def chance_to_activate_2(target):
+    '''
+    Second model approach. The probability of u activating v is
+    given by 1/d_v. Note we don't need the initial probabilities for
+    this approach.
+    
+    Parameters:
+        @param target: the target of the edge.
+        
+    Returns:
+        The probability of activation.
+    '''
+    vertex = g.vs.select(target)
+    d = vertex.outdegree() + vertex.indegree()    
+    return 1/d
+
+
+
+def activation(verbosity, source, target):
+    '''
+    Calls for one or the other activation function depending on the user's
+    input.
+    
+    Parameters:
+        @param verbosity: 1 for the first model approach, 2 for the second one.
+        @param source: the source of the edge.
+        @param target: the target of the edge.
+        
+    Returns:
+        Either first model approach probability of source activating target or 
+        the second one depending on the verbosity chosen.
+    '''
+    if verbosity == 1:
+        chance_to_activate_1(source, target)
+    if verbosity == 2:
+        chance_to_activate_2(target)
+    else:
+        raise ('Incorrect activation. Please select 1 or 2.')
+    
+    
+    
 def init_prob(g, p):
     '''
     Initiallizes the probability of the edges.
@@ -33,7 +93,7 @@ def one_step(g, seed, old_edges):
         for nb in g.successors(v):
             if nb in seed or (v, nb) in old_edges or (v, nb) in active_edges:
                 continue
-            if random() <= g.es.select(_source=v, _target=nb)['prob'][0]:
+            if random() <= activation(1, v, nb):
                 active_nodes.add(nb)
             active_edges.add((v, nb))
     seed = seed + list(active_nodes)

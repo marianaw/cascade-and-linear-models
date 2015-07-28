@@ -92,7 +92,7 @@ def linear_threshold(g, seed):
         The final set of active vertices seed and a list of the
         sets of active vertices at each step.
     '''
-    init_weights(g, 0.95)
+    init_weights(g)
     init_node_probs(g)
     B = [seed]
     vs = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
