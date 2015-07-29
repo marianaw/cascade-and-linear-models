@@ -2,7 +2,7 @@ from igraph import Graph
 from random import random
 
 
-def chance_to_activate_1(source, target):
+def chance_to_activate_1(g, source, target):
     '''
     First model approach on the paper. The probability of 
     u activating v is c_(u,v)/d_v.
@@ -14,14 +14,14 @@ def chance_to_activate_1(source, target):
     Returns:
         The probability of source activating target.
     '''
-    edges = [graph.es.select(_source=source, _target=target)]
+    edges = [g.es.select(_source=source, _target=target)]
     c = len(edges)
     p = edges[0]['prob'][0]
     return 1-(1-p)**c
 
 
 
-def chance_to_activate_2(target):
+def chance_to_activate_2(g, target):
     '''
     Second model approach. The probability of u activating v is
     given by 1/d_v. Note we don't need the initial probabilities for
@@ -33,13 +33,13 @@ def chance_to_activate_2(target):
     Returns:
         The probability of activation.
     '''
-    vertex = g.vs.select(target)
+    vertex = g.vs.select(target)[0]
     d = vertex.outdegree() + vertex.indegree()    
     return 1/d
 
 
 
-def activation(verbosity, source, target):
+def activation(g, verbosity, source, target):
     '''
     Calls for one or the other activation function depending on the user's
     input.
@@ -54,10 +54,10 @@ def activation(verbosity, source, target):
         the second one depending on the verbosity chosen.
     '''
     if verbosity == 1:
-        return chance_to_activate_1(source, target)
+        return chance_to_activate_1(g, source, target)
     else:
         if verbosity == 2:
-            return chance_to_activate_2(target)
+            return chance_to_activate_2(g, target)
         else:
             raise Exception('Incorrect activation. Please select 1 or 2.')
     
@@ -94,7 +94,7 @@ def one_step(g, seed, old_edges):
         for nb in g.successors(v):
             if nb in seed or (v, nb) in old_edges or (v, nb) in active_edges:
                 continue
-            if random() <= activation(1, v, nb):
+            if random() <= activation(g, 2, v, nb):
                 active_nodes.add(nb)
             active_edges.add((v, nb))
     seed = seed + list(active_nodes)
@@ -135,6 +135,6 @@ def independent_cascade(g, seed, p, st=10):
 if __name__ == '__main__':
     graph = Graph.Read_Edgelist(open('somegraph1.txt', 'r'))
     seed = [24394, 42653]
-    A, B = independent_cascade(graph, seed, 0.7, 15)
+    A, B = independent_cascade(graph, seed, 0.2, 15)
     for i in B:
         print (i)
