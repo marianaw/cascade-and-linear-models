@@ -11,12 +11,13 @@ def init_weights(g):
     '''
     vs = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
     for u in vs:
-        for v in g.neighbours(u):
-            edges = [graph.es.select(_source=u, _target=v)]
+        for v in g.neighbors(u):
+            edges = graph.es.select(_source=u, _target=v)
             n = len(edges)
-            vertex = g.vs.select(v)
+            vertex = g.vs.select(v)[0]
             d = vertex.outdegree() + vertex.indegree()
             w = n/d
+            #import ipdb; ipdb.set_trace()
             for e in edges:
                 e.update_attributes({'weight': w})
      
@@ -69,7 +70,7 @@ def one_step(g, v, seed):
     in_nbs = in_neighbours(g, v)
     active_nbs = [(n, v) for (n, v) in in_nbs if n in seed]
     ss = 0
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     vertex = g.vs.select(v)[0]
     for n in active_nbs:
         neigh = g.es.select(_source=n[0], _target=n[1])[0]
@@ -108,6 +109,6 @@ if __name__ == '__main__':
     graph = Graph.Read_Edgelist(open('g.txt', 'r'))
     seed = [24394]
     A, B = linear_threshold(graph, seed)
-    import ipdb; ipdb.set_trace()
+    #import ipdb; ipdb.set_trace()
     for i in B:
         print(i)

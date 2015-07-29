@@ -54,11 +54,12 @@ def activation(verbosity, source, target):
         the second one depending on the verbosity chosen.
     '''
     if verbosity == 1:
-        chance_to_activate_1(source, target)
-    if verbosity == 2:
-        chance_to_activate_2(target)
+        return chance_to_activate_1(source, target)
     else:
-        raise ('Incorrect activation. Please select 1 or 2.')
+        if verbosity == 2:
+            return chance_to_activate_2(target)
+        else:
+            raise Exception('Incorrect activation. Please select 1 or 2.')
     
     
     
