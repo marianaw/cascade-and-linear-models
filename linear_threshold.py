@@ -12,11 +12,12 @@ def init_weights(g):
     vs = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
     for u in vs:
         for v in g.neighbors(u):
-            edges = graph.es.select(_source=u, _target=v)
+            edges = g.es.select(_source=u, _target=v)
             n = len(edges)
             vertex = g.vs.select(v)[0]
             d = vertex.outdegree() + vertex.indegree()
             w = n/d
+            #print ('weight', v, ':', w)
             #import ipdb; ipdb.set_trace()
             for e in edges:
                 e.update_attributes({'weight': w})
@@ -70,14 +71,15 @@ def one_step(g, v, seed):
     in_nbs = in_neighbours(g, v)
     active_nbs = [(n, v) for (n, v) in in_nbs if n in seed]
     ss = 0
-    #import ipdb; ipdb.set_trace()
+    weights_active = set()
     vertex = g.vs.select(v)[0]
     for n in active_nbs:
         neigh = g.es.select(_source=n[0], _target=n[1])[0]
         ss = ss + neigh.attributes()['weight']
     if ss >= vertex.attributes()['prob']:
         seed = seed + [v]
-    return seed
+        weights_active.add((v, ss))
+    return seed, weights_active
 
 
     
@@ -95,20 +97,12 @@ def linear_threshold(g, seed):
     '''
     init_weights(g)
     init_node_probs(g)
-    B = [seed]
+    B = []
     vs = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
     for v in vs:
         if v not in seed:
-            seed = one_step(g, v, seed)
-        B = B + [seed]
+            seed, weights_active = one_step(g, v, seed)
+        B = B + [weights_active]
     return seed, B    
             
             
-            
-if __name__ == '__main__':
-    graph = Graph.Read_Edgelist(open('g.txt', 'r'))
-    seed = [24394]
-    A, B = linear_threshold(graph, seed)
-    #import ipdb; ipdb.set_trace()
-    for i in B:
-        print(i)
