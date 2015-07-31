@@ -4,7 +4,7 @@ from numpy.random import random, random_integers
 from numpy import inf
 
 
-def greedy_ICM(g, iterations, p, k, st):
+def greedy_ICM(g, iterations, p, k, st, verb):
     '''
     Generates the initial seed set according to the greedy approach simulating with
     the independent cascade model.
@@ -28,7 +28,7 @@ def greedy_ICM(g, iterations, p, k, st):
             old_avg = avg
             ss = 0
             while iterations>0:
-                S, _, visited = independent_cascade(g, seed_copy, p, st, 1)
+                S, _, visited = independent_cascade(g, seed_copy, p, st, verb)
                 den = len(visited)
                 ss = ss + len(S)/den
                 iterations = iterations - 1

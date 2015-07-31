@@ -17,22 +17,22 @@ def ltmodel (g, iterations, k, st):
 
     for i in range(0, k):
         seed = greedy_LTM(g, iterations, i, st)
-        S, _, _ = linear_threshold(g, seed, st)
+        S, _, _ = linear_threshold(g, seed, 0)
         gr.append(len(S))
 
     for i in range(0, k):
         seed = high_degree(g, i)
-        S, _, _ = linear_threshold(g, seed, st)
+        S, _, _ = linear_threshold(g, seed, 0)
         hd.append(len(S))
 
     for i in range(0, k):
         seed = distance_centrality(g, i)
-        S, _, _ = linear_threshold(g, seed, st)
+        S, _, _ = linear_threshold(g, seed, 0)
         ce.append(len(S))
 
     for i in range(0, k):
         seed = random_choice(g, i)
-        S, _, _ = linear_threshold(g, seed, st)
+        S, _, _ = linear_threshold(g, seed, 0)
         ra.append(len(S))
 
     plt.plot(x, gr, color='r')
@@ -52,20 +52,20 @@ def icmodel_1 (g, iterations, k, st):
     ce = []
     ra = []
     for i in range(0, k):
-        seed = greedy_ICM(g, iterations, p, i, st)
-        S, _ , _ = independent_cascade(g, seed, p, st, 1)
+        seed = greedy_ICM(g, iterations, p, i, st, 1)
+        S, _ , _ = independent_cascade(g, seed, p, 0, 1)
         gr.append(len(S))
     for i in range(0, k):
         seed = high_degree(g, i)
-        S, _ , _ = independent_cascade(g, seed, p, st, 1)
+        S, _ , _ = independent_cascade(g, seed, p, 0, 1)
         hd.append(len(S))
     for i in range(0, k):
         seed = distance_centrality(g, i)
-        S, _, _ = independent_cascade(g, seed, p, st, 1)
+        S, _, _ = independent_cascade(g, seed, p, 0, 1)
         ce.append(len(S))
     for i in range(0, k):
         seed = random_choice(g, i)
-        S, _, _ = independent_cascade(g, seed, p, st, 1)
+        S, _, _ = independent_cascade(g, seed, p, 0, 1)
         ra.append(len(S))
     plt.plot(x, gr, color='r')
     plt.plot(x, hd, color='g')
@@ -84,20 +84,20 @@ def icmodel_2 (g, iterations, k, st):
     ce = []
     ra = []
     for i in range(0, k):
-        seed = greedy_ICM(g, iterations, p, i, st)
-        S, _ , _ = independent_cascade(g, seed, p, st, 1)
+        seed = greedy_ICM(g, iterations, p, i, st, 1)
+        S, _ , _ = independent_cascade(g, seed, p, 0, 1)
         gr.append(len(S))
     for i in range(0, k):
         seed = high_degree(g, i)
-        S, _ , _ = independent_cascade(g, seed, p, st, 1)
+        S, _ , _ = independent_cascade(g, seed, p, 0, 1)
         hd.append(len(S))
     for i in range(0, k):
         seed = distance_centrality(g, i)
-        S, _, _ = independent_cascade(g, seed, p, st, 1)
+        S, _, _ = independent_cascade(g, seed, p, 0, 1)
         ce.append(len(S))
     for i in range(0, k):
         seed = random_choice(g, i)
-        S, _, _ = independent_cascade(g, seed, p, st, 1)
+        S, _, _ = independent_cascade(g, seed, p, 0, 1)
         ra.append(len(S))
     plt.plot(x, gr, color='r')
     plt.plot(x, hd, color='g')
@@ -116,20 +116,20 @@ def wcmodel (g, iterations, k, st):
     ce = []
     ra = []
     for i in range(0, k):
-        seed = greedy_ICM(g, iterations, p, i, st)
-        S, _ , _ = independent_cascade(g, seed, p, st, 2)
+        seed = greedy_ICM(g, iterations, p, i, st, 2)
+        S, _ , _ = independent_cascade(g, seed, p, 0, 2)
         gr.append(len(S))
     for i in range(0, k):
         seed = high_degree(g, i)
-        S, _ , _ = independent_cascade(g, seed, p, st, 2)
+        S, _ , _ = independent_cascade(g, seed, p, 0, 2)
         hd.append(len(S))
     for i in range(0, k):
         seed = distance_centrality(g, i)
-        S, _, _ = independent_cascade(g, seed, p, st, 2)
+        S, _, _ = independent_cascade(g, seed, p, 0, 2)
         ce.append(len(S))
     for i in range(0, k):
         seed = random_choice(g, i)
-        S, _, _ = independent_cascade(g, seed, p, st, 2)
+        S, _, _ = independent_cascade(g, seed, p, 0, 2)
         ra.append(len(S))
     plt.plot(x, gr, color='r')
     plt.plot(x, hd, color='g')
@@ -146,9 +146,9 @@ if __name__ == '__main__':
     g = Graph.Read_Edgelist(open(filename, 'r'))
     iterations = 3
     st = 2
-    ltmodel (g, iterations, k, st)
-    icmodel_1(g, iterations, k, st)
-    icmodel_2(g, iterations, k, st)
+    #ltmodel (g, iterations, k, st)
+    #icmodel_1(g, iterations, k, st)
+    #icmodel_2(g, iterations, k, st)
     wcmodel (g, iterations, k, st)
     
      

@@ -14,11 +14,11 @@ class InvalidModel(Exception):
     
     
 #To load seed:
-def load_seed(g, iterations, s, size, p):
+def load_seed(g, iterations, s, size, p, st, verb):
     if s == 'greedyICM':
-        return greedy_ICM(g, iterations, p, size)
+        return greedy_ICM(g, iterations, p, size, st, verb)
     if s == 'greedyLTM':
-        return greedy_LTM(g, iterations, size)
+        return greedy_LTM(g, iterations, size, st)
     if s == 'high_degree':
         return high_degree(g, size)
     if s == 'distance_centrality':
@@ -77,14 +77,14 @@ def main():
     try:
         st = int(opt.num_steps)
         model = opt.model
-        seed = load_seed(graph, int(opt.iterations), opt.seed, int(opt.size), p)
+        verbosity = int(opt.verbosity)
+        seed = load_seed(graph, int(opt.iterations), opt.seed, int(opt.size), p, 2, verbosity)
         if model == 'ICM':
             
             #p = float(opt.prob)
             if p>1 or p<0:
                 raise Exception('Probability falls between 0 and 1.')
             
-            verbosity = int(opt.verbosity)
             A, B, _ = independent_cascade(graph, seed, p, st, verbosity)
             args = [p, verbosity]
         else:
