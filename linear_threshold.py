@@ -56,7 +56,7 @@ def in_neighbours(g, v):
 
 
 
-def one_step(g, v, seed):
+def one_step(g, v, seed, visited):
     '''
     Performs one step of the algorithm.
     
@@ -79,11 +79,12 @@ def one_step(g, v, seed):
     if ss >= vertex.attributes()['prob']:
         seed = seed + [v]
         weights_active.add((v, ss))
-    return seed, weights_active
+    visited.add(v)
+    return seed, weights_active, visited
 
 
     
-def linear_threshold(g, seed):
+def linear_threshold(g, seed, st):
     '''
     The main algorithm. Computes linear threshold model.
     
@@ -98,11 +99,16 @@ def linear_threshold(g, seed):
     init_weights(g)
     init_node_probs(g)
     B = []
+    weights_active = set()
+    visited = set(seed)
     vs = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
     for v in vs:
         if v not in seed:
-            seed, weights_active = one_step(g, v, seed)
+            seed, weights_active, visited = one_step(g, v, seed, visited)
         B = B + [weights_active]
-    return seed, B    
+        st = st-1
+        if st == 0:
+            break
+    return seed, B, visited
             
             

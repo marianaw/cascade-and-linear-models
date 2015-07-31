@@ -76,7 +76,7 @@ def init_prob(g, p):
 
 
 
-def one_step(g, seed, old_edges, verbosity):
+def one_step(g, seed, old_edges, verbosity, visited):
     '''
     Performs one step of the algorithm.
     
@@ -91,6 +91,7 @@ def one_step(g, seed, old_edges, verbosity):
     active_nodes = set()
     active_edges = set()
     prob_active = set()
+
     for v in seed:
         #import ipdb; ipdb.set_trace()
         for nb in g.successors(v):
@@ -101,8 +102,9 @@ def one_step(g, seed, old_edges, verbosity):
                 active_nodes.add(nb)
                 prob_active.add((nb, prob))
             active_edges.add((v, nb))
+            visited.add(nb)
     seed = seed + list(active_nodes)
-    return active_edges, active_nodes, seed, prob_active
+    return active_edges, active_nodes, seed, prob_active, visited
     
     
     
@@ -124,19 +126,28 @@ def independent_cascade(g, seed, p, st, verbosity):
     old_edges = set()
     B = []
     gvcount = len(set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()]))
-    
+    visited = set(seed)
     #If st set to zero then we want the algorithm to run until it runs out of nodes. To reset st=gvount+1000
     #is a simple way of achieving that.
     if st == 0:
         st = gvcount + 1000 
-        
+    #import ipdb; ipdb.set_trace()
     while st>0 and gvcount>len(seed):
         alen = len(seed)
-        active_edges, active_nodes, seed, prob_active = one_step(g, seed, old_edges, verbosity)
+        active_edges, active_nodes, seed, prob_active, visited = one_step(g, seed, old_edges, verbosity, visited)
         B = B + [prob_active]
         old_edges = old_edges.union(active_edges)
         if len(seed) == alen:
             break
         st = st - 1
-    return seed, B
+    return seed, B, visited
 
+#if __name__ == '__main__':
+    #g = Graph.Read_Edgelist(open('somegraph1.txt', 'r'))
+    #p = 0.7
+    #st = 0
+    #seed =[11580, 26913, 31944, 45521, 67802, 41687, 2424, 65619]
+    #verbosity = 1
+    #a, b, c = independent_cascade(g, seed, p, st, verbosity)
+    #print (b)
+    #print (c)
