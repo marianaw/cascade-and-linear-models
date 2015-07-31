@@ -120,7 +120,7 @@ def independent_cascade(g, seed, p, st, verbosity):
        
     Returns:
         A set of active nodes and a list of the active nodes at each
-        step.
+        step. Also a list of visited nodes.
     '''
     init_prob(g, p)
     old_edges = set()

@@ -1,6 +1,7 @@
 from linear_threshold import linear_threshold
 from independent_cascade import independent_cascade
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 from seed_algorithms import greedy_ICM, greedy_LTM, high_degree, distance_centrality, random_choice
 from igraph import Graph
 
@@ -41,6 +42,12 @@ def ltmodel (g, iterations, k, st):
     plt.plot(x, ra, color='b')
     plt.ylabel('Active nodes set size.')
     plt.xlabel('Target set size.')
+    red_patch = mpatches.Patch(color='red', label='Greedy.')
+    green_patch = mpatches.Patch(color='green', label='High degree.')
+    bl_patch = mpatches.Patch(color='black', label='Distance centrality.')
+    blue_patch = mpatches.Patch(color='blue', label='Random.')
+    plt.legend(handles=[red_patch, green_patch, bl_patch, blue_patch])
+    plt.show()
     plt.show()
 
 
@@ -73,6 +80,11 @@ def icmodel_1 (g, iterations, k, st):
     plt.plot(x, ra, color='b')
     plt.ylabel('Active nodes set size.')
     plt.xlabel('Target set size.')
+    red_patch = mpatches.Patch(color='red', label='Greedy.')
+    green_patch = mpatches.Patch(color='green', label='High degree.')
+    bl_patch = mpatches.Patch(color='black', label='Distance centrality.')
+    blue_patch = mpatches.Patch(color='blue', label='Random.')
+    plt.legend(handles=[red_patch, green_patch, bl_patch, blue_patch])
     plt.show()
 
 
@@ -105,6 +117,11 @@ def icmodel_2 (g, iterations, k, st):
     plt.plot(x, ra, color='b')
     plt.ylabel('Active nodes set size.')
     plt.xlabel('Target set size.')
+    red_patch = mpatches.Patch(color='red', label='Greedy.')
+    green_patch = mpatches.Patch(color='green', label='High degree.')
+    bl_patch = mpatches.Patch(color='black', label='Distance centrality.')
+    blue_patch = mpatches.Patch(color='blue', label='Random.')
+    plt.legend(handles=[red_patch, green_patch, bl_patch, blue_patch])
     plt.show()
 
 
@@ -137,6 +154,11 @@ def wcmodel (g, iterations, k, st):
     plt.plot(x, ra, color='b')
     plt.ylabel('Active nodes set size.')
     plt.xlabel('Target set size.')
+    red_patch = mpatches.Patch(color='red', label='Greedy.')
+    green_patch = mpatches.Patch(color='green', label='High degree.')
+    bl_patch = mpatches.Patch(color='black', label='Distance centrality.')
+    blue_patch = mpatches.Patch(color='blue', label='Random.')
+    plt.legend(handles=[red_patch, green_patch, bl_patch, blue_patch])
     plt.show()
     
     
@@ -147,8 +169,8 @@ if __name__ == '__main__':
     iterations = 3
     st = 2
     #ltmodel (g, iterations, k, st)
-    #icmodel_1(g, iterations, k, st)
+    icmodel_1(g, iterations, k, st)
     #icmodel_2(g, iterations, k, st)
-    wcmodel (g, iterations, k, st)
+    #wcmodel (g, iterations, k, st)
     
      

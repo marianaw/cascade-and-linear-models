@@ -94,7 +94,7 @@ def linear_threshold(g, seed, st):
         
     Returns:
         The final set of active vertices seed and a list of the
-        sets of active vertices at each step.
+        sets of active vertices at each step. Also a list of visited nodes.
     '''
     init_weights(g)
     init_node_probs(g)
@@ -103,6 +103,8 @@ def linear_threshold(g, seed, st):
     visited = set(seed)
     vs = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
     for v in vs:
+        if v in visited:
+            continue
         if v not in seed:
             seed, weights_active, visited = one_step(g, v, seed, visited)
         B = B + [weights_active]

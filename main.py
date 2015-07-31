@@ -52,6 +52,48 @@ def prettyprint(model, seed, output, args):
         for tup in res:
             print(step, '\t\t|\t\t ', tup[0], '\t\t|\t\t ', '%.3f' % tup[1])
         step = step + 1
+
+
+
+def which_step_prob(n, B):
+    i = 1
+    for step in B:
+        if len(step) != 0:
+            for t in step:
+                if t[0] == n:
+                    return i, t[1]
+        i = i+1
+        
+            
+    
+def prettyprint_2(g, model, seed, A, B, args):
+    print('----------------------\n')
+    print('The initial seed was:\n')
+    print(seed)
+    print('----------------------\n')
+    print ('You selected the model ', model, '.')
+    if model == 'ICM':
+        print ('Probability: ', args[0])
+        print ('Verbosity: ', args[1])
+    print('----------------------\n')
+    print('Node\t\t Active/Inactive \t\t Activation value \t\t Step of activation (if any)')
+    print('-------------------------------------------------------------------------------------------\n')
+    nodes = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
+    if len(B) == 0:
+        raise Exception('Nothing to print!')
+    activated_nodes = set(A).difference(set(seed))
+    for n in nodes:
+        if n in activated_nodes:
+            active = 1
+            step, prob = which_step_prob(n, B)
+        else:
+            active = 0
+            prob = '--'
+            step = '\t\t--'
+        print (n, '\t\t\t', active, '\t\t\t', prob, '\t\t\t', step)
+    print('********')
+    
+    
     
 def main():
     parser = OptionParser()
@@ -93,7 +135,9 @@ def main():
                 args = []
             else:
                 raise InvalidModel('Invalid model ' + model + '.')
-        prettyprint(model, seed, B, args)
+        #prettyprint(model, seed, B, args)
+        #print (B)
+        prettyprint_2(graph, model, seed, A, B, args)
     except InvalidModel as e:
         print('Ups! Seems like an invalid model name: ', e)
     
