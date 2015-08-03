@@ -160,8 +160,3 @@ def random_choice(g, k):
         nodes = list(set(nodes).difference({node}))
     return seed
 
-if __name__ == '__main__':
-    from igraph import Graph
-    g = Graph.Read_Edgelist(open('g.txt', 'r'))
-    seed = greedy_LTM(g, 3, 4, 2)
-    print(seed)

@@ -48,7 +48,6 @@ def ltmodel (g, iterations, k, st):
     blue_patch = mpatches.Patch(color='blue', label='Random.')
     plt.legend(handles=[red_patch, green_patch, bl_patch, blue_patch])
     plt.show()
-    plt.show()
 
 
 
@@ -164,7 +163,7 @@ def wcmodel (g, iterations, k, st):
     
     
 if __name__ == '__main__':
-    filename = 'g.txt'
+    filename = 'somegraph1.txt'
     g = Graph.Read_Edgelist(open(filename, 'r'))
     iterations = 3
     st = 2

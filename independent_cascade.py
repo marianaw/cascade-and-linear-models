@@ -142,12 +142,3 @@ def independent_cascade(g, seed, p, st, verbosity):
         st = st - 1
     return seed, B, visited
 
-#if __name__ == '__main__':
-    #g = Graph.Read_Edgelist(open('somegraph1.txt', 'r'))
-    #p = 0.7
-    #st = 0
-    #seed =[11580, 26913, 31944, 45521, 67802, 41687, 2424, 65619]
-    #verbosity = 1
-    #a, b, c = independent_cascade(g, seed, p, st, verbosity)
-    #print (b)
-    #print (c)

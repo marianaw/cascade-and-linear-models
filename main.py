@@ -111,6 +111,8 @@ def main():
     try:
         p = float(opt.prob)
         graph = Graph.Read_Edgelist(open(opt.graph, 'r'))
+        print ('Number of edges: ', len(graph.es))
+        print ('Number of nodes: ', len(set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])))
         
     except Exception as e:
         print('Ups! Invalid name: ', e)
@@ -147,7 +149,3 @@ def main():
     
 if __name__ == '__main__':
     main()
-    #prettyprint('LTM', [1,2,2], {})
-    #graph = Graph.Read_Edgelist(open('g.txt', 'r'))
-    #seed = load_seed(graph, 5, 'random_choice', 3)
-    #print (seed)
