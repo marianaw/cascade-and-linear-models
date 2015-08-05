@@ -14,9 +14,9 @@ def chance_to_activate_1(g, source, target):
     Returns:
         The probability of source activating target.
     '''
-    edges = [g.es.select(_source=source, _target=target)]
+    edges = g.es.select(_source=source, _target=target)
     c = len(edges)
-    p = edges[0]['prob'][0]
+    p = edges[0]['prob']
     return 1-(1-p)**c
 
 
