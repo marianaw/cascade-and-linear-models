@@ -27,7 +27,7 @@ def load_seed(g, iterations, s, size, p, st, verb):
     if s == 'random_choice':
         return random_choice(g, size)
     else:
-        raise Exception('Invalid algorithm. Use -h for help.')
+        raise Exception('Invalid seed algorithm. Use -h for help.')
             
 
 
@@ -43,15 +43,12 @@ def main():
     parser.add_option("-k", dest="size", help="Size of the seed.")
     opt, args = parser.parse_args()
     
+    p = float(opt.prob)
+    graph = Graph.Read_Edgelist(open(opt.graph, 'r'))
+    print ('Number of edges: ', len(graph.es))
+    print ('Number of nodes: ', len(set([i for (i, _) in graph.get_edgelist()] + [i for (_, i) in graph.get_edgelist()])))
     
-    try:
-        p = float(opt.prob)
-        graph = Graph.Read_Edgelist(open(opt.graph, 'r'))
-        print ('Number of edges: ', len(graph.es))
-        print ('Number of nodes: ', len(set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])))
         
-    except Exception as e:
-        print('Ups! Invalid name: ', e)
     A = []
     B = []
     try:
