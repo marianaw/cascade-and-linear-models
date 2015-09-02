@@ -18,7 +18,9 @@ def greedy_ICM(g, iterations, p, k, st, verb):
         The seed set with which to feed the algorithms.
     '''
     seed = []
-    nodes = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
+    nodes = [i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()]
+    current_node = nodes[0] #An initialization, just rare cases.
+    nodes = set(nodes)
     T = iterations
     num_nodes = len(nodes)
     while len(seed) < k:
@@ -57,7 +59,9 @@ def greedy_LTM(g, iterations, k, st):
         The seed set with which to feed the algorithms.
     '''
     seed = []
-    nodes = set([i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()])
+    nodes = [i for (i, _) in g.get_edgelist()] + [i for (_, i) in g.get_edgelist()]
+    current_node = nodes[0] #An initialization, just rare cases.
+    nodes = set(nodes)
     T = iterations
     num_nodes = len(nodes)
     while len(seed) < k:
@@ -124,15 +128,10 @@ def distance_centrality(g, k):
     num_nodes = len(nodes)
     distances = []
     for n in nodes:
-        avg = 0
-        s = 0
         node = g.vs.select(n)
-        for v in nodes.difference({n}):
-            path = node.shortest_paths(v)[0][0]
-            if path == inf:
-                path = num_nodes
-            s = s + path
-        avg = s/(num_nodes - 1)     
+        path = node.shortest_paths(v)[0][1:]
+        path = [p if not(p == inf) else num_nodes for p in l]
+        avg = sum(path)/(num_nodes-1)
         distances.append((avg, n))
     distances = sorted(distances)
     return [t[1] for t in distances[0:k]]
@@ -154,7 +153,7 @@ def random_choice(g, k):
     nodes = list(nodes)
     seed = []
     for i in range(0,k):
-        t = random_integers(0, len(nodes)-len(seed)-1)
+        t = random_integers(0, len(nodes)-1)
         node = nodes[t]
         seed.append(nodes[t])
         nodes = list(set(nodes).difference({node}))
